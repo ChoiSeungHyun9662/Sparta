@@ -116,17 +116,6 @@ function listing() {
 }
 
 function make_card(comment, desc, image, title, url) {
-	let temp_html = '<div class="card">\
-	<img class="card-img-top" src="'+image+'" alt="Card image cap">\
-	<div class="card-body">\
-	<a href="'+url+'" target="_blank" class="card-title">'+title+'</a>\
-	<p class="card-text">'+desc+'</p>\
-	<p class="card-text comment">'+comment+'</p>\
-	</div>\
-	</div>';
-	$('#cards-box').append(temp_html);
-}
-
 $.ajax({
 	type: "GET",
 	url: "http://spartacodingclub.shop/post?author_give=스파르타코딩클럽",
@@ -143,6 +132,17 @@ $.ajax({
 		}
 	}
 })
+
+	let temp_html = '<div class="card">\
+	<img class="card-img-top" src="'+image+'" alt="Card image cap">\
+	<div class="card-body">\
+	<a href="'+url+'" target="_blank" class="card-title">'+title+'</a>\
+	<p class="card-text">'+desc+'</p>\
+	<p class="card-text comment">'+comment+'</p>\
+	</div>\
+	</div>';
+	$('#cards-box').append(temp_html);
+}
 
 </script>
 

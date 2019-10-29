@@ -19,9 +19,62 @@
   
   <script>
     function subscribe() {
-      alert('구독 신청이 완료되었습니다.');
-      location.reload(true);
+
+      let name = $('#Sc_Name').val();
+      let count = $('#Sc_Count').val();
+      let address = $('#Sc_Address').val();
+      let phone = $('#Sc_Phone').val();
+
+      $.ajax({
+        type: "POST",
+        url: "http://spartacodingclub.shop/order",
+        data: { name_give: name, count_give: count, address_give: address, phone_give: phone, item_give: "FIFA20"},
+        success: function(response){
+          if (response['result'] == 'success') {
+            alert('구독 신청이 접수되었습니다');
+            window.location.reload();
+          } else if (response['result'] == 'fail'){
+            alert('서버 오류!')
+          }
+        }
+      })
     }
+
+    $(document).ready(function(){
+      $('#WholeList > tbody').empty();
+      listing();
+    });
+
+    function listing() {
+      $.ajax({
+      type: "GET",
+      url: "http://spartacodingclub.shop/order",
+      data: { item_give: "FIFA20" },
+      success: function(response){
+        if (response['result'] == 'success') {
+          let orders = response['orders'];
+          console.log(orders);
+          for (let i = 0; i < orders.length; i++) {
+            make_ScList(orders[i]['item'], orders[i]['name'],orders[i]['count'],orders[i]['address'],orders[i]['phone'])
+          }
+        } else {
+          alert('구독 리스트를 받아오지 못했습니다.');
+        }
+      }
+    })
+    }
+
+    function make_ScList(item, name, count, address, phone) {
+      let temp_ScList = '<tr>\
+      <td>'+item+'</td>\
+      <td>'+name+'</td>\
+      <td>'+count+'</td>\
+      <td>'+address+'</td>\
+      <td>'+phone+'</td>\
+    </tr>';
+      $('#ScList').append(temp_ScList);
+    }
+
   </script>
 
   <Style>
@@ -38,6 +91,8 @@
       border-bottom: 1px solid; margin-bottom: 10px;
     }
   </Style>
+
+
 
   <title>원 페이지 쇼핑몰!</title>
 </head>
@@ -65,6 +120,7 @@
     <h6 style="margin-top: -5px;">자세한 내용은 <a href="https://www.ea.com/ko-kr/games/fifa/fifa-20/fifa-20-game-and-offer-disclaimers/" target="_blank">https://www.ea.com/ko-kr/games/fifa/fifa-20/fifa-20-game-and-offer-disclaimers</a>를 참고하세요.</h6>
 
   </div>
+  <div style="margin-left: -75px">
   <div class="container" style="margin-top: 30px; width: 500px;">
     <div class="row" style="text-align: left; align-items: baseline; margin: auto;">
       <div class="col-2">
@@ -116,18 +172,20 @@
       </div>
     </div>
   </div>
+</div>
 
-  <div class="wrapper" style = "margin-top: 30px">
+  <div class="wrapper" style = "margin-top: 75px">
     <h2 style="font-weight: bold;">구독 신청하러 가기!</h2>
   </div>
 
-  <div class="container" style = "width: 300px">
+<div style="margin-left: -75px">
+  <div class="container" style = "width: 300px;">
     <div class="row" style="margin-top: 10px; align-items: baseline;">
       <div class="col" style="text-align: left;">
         <h6>구독자 성함:</h6>
       </div>
       <div class="col-7" style="text-align: left;">
-        <input type = "text">
+        <input type = "text" id="Sc_Name">
       </div>
     </div>
 
@@ -136,11 +194,11 @@
         <h6>구독 기간:</h6>
       </div>
       <div class="col-7" style="text-align: left;">
-        <select name = "개월">
-          <option value = "1">1개월 - 16,500 원</option>
-          <option value = "3">3개월 - 49,500 원</option>
-          <option value = "6">6개월 - 99,000 원</option>
-          <option value = "12">12개월 - 19,8000 원</option>
+        <select name = "개월" id="Sc_Count" style="width: 219px;">
+          <option value = "1">1개월 - ￦ 16,500</option>
+          <option value = "3">3개월 - ￦ 49,500</option>
+          <option value = "6">6개월 - ￦ 99,000</option>
+          <option value = "12">12개월 - ￦ 107,500</option>
         </select>
       </div>
     </div>
@@ -150,7 +208,7 @@
         <h6>신청자 주소:</h6>
       </div>
       <div class="col-7" style="text-align: left;">
-        <input type = "text">
+        <input type = "text" id="Sc_Address">
       </div>
     </div>
 
@@ -159,14 +217,37 @@
         <h6>전화번호:</h6>
       </div>
       <div class="col-7" style="text-align: left;">
-        <input type = "text">
+        <input type = "text" id="Sc_Phone">
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <div class = "wrapper" style="margin-top: 20px;">
   <button type="button" class="btn btn-primary" onclick="subscribe()">구독 신청</button>
 </div>
+
+<table class="table" style ="width: 800px; margin: auto; margin-top: 100px; margin-bottom: 50px;" id = "WholeList">
+  <thead>
+    <tr>
+      <th scope="col">상품명</th>
+      <th scope="col">구독자 성함</th>
+      <th scope="col">구독 기간</th>
+      <th scope="col">구독자 주소</th>
+      <th scope="col">전화번호</th>
+    </tr>
+  </thead>
+  <tbody id = "ScList">
+    <tr>
+      <td>FIFA20</td>
+      <td>최승현</td>
+      <td>12개월</td>
+      <td>서울시 은천로</td>
+      <td>01033333333</td>
+    </tr>
+  </tbody>
+</table>
+
 </body>
 </html>
