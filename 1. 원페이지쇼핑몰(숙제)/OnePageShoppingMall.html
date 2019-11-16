@@ -27,7 +27,7 @@
 
       $.ajax({
         type: "POST",
-        url: "http://spartacodingclub.shop/order",
+        url: "/order",
         data: { name_give: name, count_give: count, address_give: address, phone_give: phone, item_give: "FIFA20"},
         success: function(response){
           if (response['result'] == 'success') {
@@ -48,7 +48,7 @@
     function listing() {
       $.ajax({
       type: "GET",
-      url: "http://spartacodingclub.shop/order",
+      url: "/order?item_give=FIFA20",
       data: { item_give: "FIFA20" },
       success: function(response){
         if (response['result'] == 'success') {
