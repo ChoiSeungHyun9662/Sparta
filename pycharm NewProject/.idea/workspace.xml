@@ -21,6 +21,7 @@
   <component name="ProjectId" id="1T6cWZeQxb1EWsPq63JHhZGEx4v" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -35,7 +36,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.GetGenieChart">
+  <component name="RunManager" selected="Python.naverMovie">
     <configuration name="GetGenieChart" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="pycharm NewProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -143,8 +144,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.GetGenieChart" />
         <item itemvalue="Python.naverMovie" />
+        <item itemvalue="Python.GetGenieChart" />
         <item itemvalue="Python.SeoulOpenAPI" />
         <item itemvalue="Python.GetPrimeNumber" />
         <item itemvalue="Python.hello" />
