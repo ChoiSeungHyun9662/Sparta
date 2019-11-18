@@ -1,27 +1,35 @@
 import requests
 from bs4 import BeautifulSoup
-from openpyxl import load_workbook
 
-#requests는 url에 접근하기 위한 도구. header 메소드를 이용하기 위해 header를 먼저 불러왔다.
-headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-data = requests.get('https://movie.naver.com/movie/sdb/rank/rmovie.nhn?sel=pnt&date=20190909',headers=headers)
+from pymongo import MongoClient  # pymongo를 임포트 하기(패키지 인스톨 먼저 해야겠죠?)
 
-work_book = load_workbook('naverMovie.xlsx') #어떤 엑셀 파일을 불러올 것인가?
-work_sheet = work_book['naverMovie'] #그 파일에서 어떤 시트를 다룰 것인가?
+client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
+db = client.dbsparta  # 'dbsparta'라는 이름의 db를 만듭니다.
 
-soup = BeautifulSoup(data.text, 'html.parser') #beautifulsoup으로 파싱한 html data를 저장한다.
+# URL을 읽어서 HTML를 받아오고,
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+data = requests.get('https://movie.naver.com/movie/sdb/rank/rmovie.nhn?sel=pnt&date=20190909', headers=headers)
 
-movies = soup.select('#old_content > table > tbody > tr') #soup에 저장한 html data를 기반으로 select를 사용하여 원하는 자료를 추적한다.
-row = 2
+# HTML을 BeautifulSoup이라는 라이브러리를 활용해 검색하기 용이한 상태로 만듦
+soup = BeautifulSoup(data.text, 'html.parser')
 
+# select를 이용해서, tr들을 불러오기
+movies = soup.select('#old_content > table > tbody > tr')
+
+# movies (tr들) 의 반복문을 돌리기
+rank = 1
 for movie in movies:
-    name = movie.select_one('td.title > div.tit5 > a')
-    score = movie.select_one('td.point')
+    # movie 안에 a 가 있으면,
+    a_tag = movie.select_one('td.title > div > a')
+    if a_tag is not None:
+        title = a_tag.text
+        star = movie.select_one('td.point').text
 
-    if name is not None:
-        work_sheet.cell(row=row, column=1, value=row - 1)
-        work_sheet.cell(row=row, column=2, value=name.text)
-        work_sheet.cell(row=row, column=3, value=float(score.text))
-        row += 1
-
-work_book.save('naverMovie.xlsx')
+        doc = {
+            'rank': rank,
+            'title': title,
+            'star': star
+        }
+        db.movies.insert_one(doc)
+        rank += 1

@@ -22,7 +22,11 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
     <property name="settings.editor.selected.configurable" value="File.Encoding" />
+=======
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+>>>>>>> c293b996576a9a16ff24b82fb0fc701de431e2bc
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -36,7 +40,11 @@
       </list>
     </option>
   </component>
+<<<<<<< HEAD
   <component name="RunManager" selected="Python.GetMetaData">
+=======
+  <component name="RunManager" selected="Python.naverMovie">
+>>>>>>> c293b996576a9a16ff24b82fb0fc701de431e2bc
     <configuration name="GetGenieChart" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="pycharm NewProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -144,9 +152,13 @@
     </configuration>
     <recent_temporary>
       <list>
+<<<<<<< HEAD
         <item itemvalue="Python.GetMetaData" />
         <item itemvalue="Python.GetGenieChart" />
+=======
+>>>>>>> c293b996576a9a16ff24b82fb0fc701de431e2bc
         <item itemvalue="Python.naverMovie" />
+        <item itemvalue="Python.GetGenieChart" />
         <item itemvalue="Python.SeoulOpenAPI" />
         <item itemvalue="Python.GetPrimeNumber" />
       </list>

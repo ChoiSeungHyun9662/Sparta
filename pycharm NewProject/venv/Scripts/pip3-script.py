@@ -1,4 +1,4 @@
-#!"C:\Users\ÃÖ½ÂÇö\Desktop\Sparta\pycharm NewProject\venv\Scripts\python.exe" -x
+#!"C:\Users\lusia\OneDrive\¹ÙÅÁ È­¸é\Sparta\pycharm NewProject\venv\Scripts\python.exe" -x
 # EASY-INSTALL-ENTRY-SCRIPT: 'pip==19.0.3','console_scripts','pip3'
 __requires__ = 'pip==19.0.3'
 import re
