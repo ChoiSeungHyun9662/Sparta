@@ -1,12 +1,7 @@
 import requests
 import pprint
-import codecs
 
 api = 'https://openapi.naver.com/v1/search/cafearticle.json?query='
-with codecs.open('search.txt', 'r', encoding='utf8') as f:
-    s_text = f.read()
-print(s_text)
-b = '콜트'
 b_text = str(b, 'utf-8')
 print(b_text)
 conditions = '&display=2&start=1&sort=sim'
