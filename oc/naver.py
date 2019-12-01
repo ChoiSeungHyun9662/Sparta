@@ -1,9 +1,72 @@
 import requests
 from urllib import parse
 from bs4 import BeautifulSoup
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from typing import List
+from pymongo import MongoClient
+from collections import OrderedDict
+
 app = Flask(__name__)
+client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
+db = client.uploaded                      # 'dbsparta'라는 이름의 db를 만듭니다.
+
+
+@app.route('/')
+def index():
+    return render_template('kakao.html')
+
+
+@app.route('/upload', methods = ['POST'])
+def upload():
+    file = request.files.getlist('file[]')  # file[]는 FileList인 상태
+    f = []
+    for x in file:
+        x = x.read()  # x는 FileStroage인 상태. read로 읽어 bytes로 풀어준다.
+        x = x.decode('utf-8')  # x는 bytes로 풀린 상태. 우리가 인식할 수 있게 utf-8로 str형태로 만들어준다.
+        f.append(x)  # 변환된 str을 리스트로 만든다. 각각의 리스트는 하나의 txt파일의 모든 내용물을 의미함.
+
+    # 작업에 앞서 db를 초기화한다.
+    if 'dialogue' in db.list_collection_names():
+        db.dialogue.drop()
+
+    # 몇 개의 txt 파일이나 불러왔지? 정제 활동을 txt파일의 갯수만큼 반복하려한다.
+    file_len = len(f)
+    dialogue = []
+
+    for i in range(file_len):
+        contents_list = f[i].split('\r\n')
+
+        # 상위 3개 lines 제거
+        for a in range(3):
+            del contents_list[0]
+
+        # 날짜 표시선 제거
+        for x in contents_list:
+            if '---' in x:
+                contents_list.remove(x)
+
+        # [사람이름] [오전 시간:시간] 항목을 제거해서 순수한 대화 내용 텍스트만 남깁니다 = dialogue: list
+        for x in contents_list:
+            for a in range(2):
+                d = x.find(']')
+                x = x[d + 2:]
+            dialogue.append(x)
+
+        [dialogue.append('') for e in range(10)]
+
+        # dialogue를 db에 저장하기
+        comment_list = []
+        [comment_list.append('comment') for g in dialogue]
+
+        print(comment_list)
+        print(dialogue)
+
+        dialogue_db = []
+        [dialogue_db.append(dict(zip(comment_list, dialogue))) for a in dialogue]
+        print(dialogue_db)
+        db.dialogue.insert(dialogue_db)
+
+    return jsonify({'result': 'success'})
 
 
 @app.route('/search', methods = ['GET'])
@@ -53,6 +116,7 @@ def search():
         link_list[i] = link_list[i].replace('http://cafe', 'http://m.cafe')
 
     result_list = []
+    dialogue_search = []
 
     # link 들의 list 를 모두 돌리면서 제목, 내용, 댓글[1]~[n]로 크롤링하여 모든 글을 리스트로 만듭니다.
     for i in range(length - 1):
@@ -65,7 +129,7 @@ def search():
         # 글 내용을 저장합니다.
         contents = soup.select('#postContent > p')
         content_list = []
-        [content_list.append(content.get_text().strip().replace('<br>', '')) for content in contents]
+        [content_list.append(content.get_text().strip()) for content in contents]
         content = ''.join(content_list)
 
         # 댓글은 여러개니까 이를 리스트로 저장합니다.
@@ -75,8 +139,25 @@ def search():
         comment_col = ' // '.join(comment_list).splitlines()
         comment_col = [w.replace('\t', '') for w in comment_col]
         comment_col = ''.join(comment_col).split(' // ')
+        comment_col = '<br>'.join(comment_col)
 
         result_list.append({'title': title, 'content': content, 'comment_col': comment_col})
+
+    # db에서 카카오톡 대화 내역 불러오기
+    dialogue = db.dialogue.find()
+
+    # 해당 검색어가 포함된 대화내용 및 이후 10개 대화내용까지 저장.
+    for x in dialogue:
+        if to_search in x:
+            n = dialogue.index(x)
+            for a in range(10):
+                dialogue_search.append(dialogue[n + a])
+
+    # 중복 대화값을 제거하여 대화 내용 리스트를 만듭니다. (서버에 리턴되는 리스트임)
+    dia_kakao = list(OrderedDict.fromkeys(dialogue_search))
+    dia_kakao.remove('')
+    print(dia_kakao)
+    result_list.append({'kakao': dia_kakao})
 
     # result_list 를 반환합니다.
     return jsonify({'result': 'success', 'result_list': result_list})

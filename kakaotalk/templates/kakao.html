@@ -3,7 +3,7 @@
 <head>
 
 	<!-- Webpage Title -->
-	<title>Hello, world!</title>
+	<title>유저 동향 파악 보조툴</title>
 
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -47,10 +47,51 @@
 	</style>
 
 	<script>
+		function searching() {
+			let word_search = $('#word_search').val();
+			$.ajax({
+				type: "GET",
+				url: "/search",
+				data: {word_search : word_search},
+        success: function(response){ // 성공하면
+        	if (response['result'] == 'success') {
+        		alert('검색 요청 성공!');
+        		window.location.reload();
+        	} else {
+        		alert('서버 오류!')
+        	}
+        }
+    })
+		}
+
+		function uplaoding() {
+			$.ajax({
+				type: "POST",
+				url: "/uplaod",
+				data: {},
+        success: function(response){ // 성공하면
+        	if (response['result'] == 'success') {
+        		alert('검색 요청 성공!');
+        		window.location.reload();
+        	} else {
+        		alert('서버 오류!')
+        	}
+        }
+    })
+		}
 	</script>
 </head>
 
 <body>
+	<div class="wrap">
+		<h1>유저 동향 파악 보조 툴</h1>
+	</div>
+	<div class="wrap">
+		<div class="form-group">
+          <label for="exampleFormControlInput1">검색 단어</label>
+          <input id="word_search" class="form-control" placeholder="">
+          <button onclick="search()" class="btn btn-primary">검색</button>
+        </div>
 	<form action = "/search" method = "POST"
          enctype = "multipart/form-data">
          <input type = "file" name = "file[]" multiple/>
