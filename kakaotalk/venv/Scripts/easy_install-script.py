@@ -1,4 +1,4 @@
-#!"C:\Users\lusia\OneDrive\¹ÙÅÁ È­¸é\Sparta\kakaotalk\venv\Scripts\python.exe" -x
+#!C:\Users\ÃÖ½ÂÇö\Desktop\Sparta\kakaotalk\venv\Scripts\python.exe -x
 # EASY-INSTALL-ENTRY-SCRIPT: 'setuptools==40.8.0','console_scripts','easy_install'
 __requires__ = 'setuptools==40.8.0'
 import re

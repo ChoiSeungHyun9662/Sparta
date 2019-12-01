@@ -47,28 +47,14 @@
 	</style>
 
 	<script>
-		function uploading() {
-			$.ajax({
-        type: "POST",
-        url: "/upload",
-        data: 
-        success: function(response){ // 성공하면
-        	if (response['result'] == 'success') {
-        		alert('포스팅 성공!');
-        		window.location.reload();
-        	} else {
-        		alert('서버 오류!')
-        	}
-        }
-    })
-		}
 	</script>
 </head>
 
 <body>
-	<form method="post" enctype="multipart/form-data">
-		<input type="file" name="file[]" multiple>
-		<input type="submit" value="Upload">
-	</form>
+	<form action = "/search" method = "POST"
+         enctype = "multipart/form-data">
+         <input type = "file" name = "file[]" multiple/>
+         <input type = "submit"/>
+        </form>
 </body>
 </html>

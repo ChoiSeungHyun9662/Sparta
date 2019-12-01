@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\lusia\OneDrive\바탕 화면\Sparta\kakaotalk\venv"
+VIRTUAL_ENV="C:\Users\최승현\Desktop\Sparta\kakaotalk\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
