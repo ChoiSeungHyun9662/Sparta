@@ -1,3 +1,4 @@
+import pymongo
 import requests
 from urllib import parse
 from bs4 import BeautifulSoup
@@ -56,9 +57,15 @@ def upload():
 
         # dialogue 를 db에 저장하기
         print(dialogue)
-        db.dialogue.insert(dialogue)
 
-    return jsonify({'result': 'success', 'result_list': dialogue})
+        for doc in dialogue:
+            try:
+                db.dialogue.insert_one(doc)
+            except pymongo.errors.DuplicateKeyError:
+                # errors 가 오류로 뜨는 이유는 pycharm 의 globally 검사의 오류임. 사실은 정상작동 합니다.
+                continue
+
+    return jsonify({'result': 'success'})
 
 
 @app.route('/search', methods=['GET'])
@@ -149,6 +156,7 @@ def search():
 
     # 중복 대화값을 제거하여 대화 내용 리스트를 만듭니다. (서버에 리턴되는 리스트임)
     dia_kakao = list(OrderedDict.fromkeys(dialogue_search))
+    dia_kakao = '<br>'.join(map(str, dia_kakao))
     print(dia_kakao)
     result_list.append({'kakao': dia_kakao})
 

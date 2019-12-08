@@ -3,7 +3,7 @@
 <head>
 
 	<!-- Webpage Title -->
-	<title>유저 동향 파악 보조툴</title>
+	<title>유저 소리 보청기 - 유저 의견, 빠르고 정확하게 듣자</title>
 
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -26,7 +26,8 @@
 		}
 		.wrap {
 			width: 900px;
-			margin: auto;
+			margin: left;
+			padding: 10px;
 		}
 		.comment {
 			color: blue;
@@ -39,10 +40,22 @@
 			border-color: #e9ecef;
 			border-radius: 0.3rem;
 			border: solid;
-			display: block;
+			display: table;
 		}
 		#posting-box {
 			display: none;
+		}
+
+		.input-bar-item {
+			display: table-cell;
+		}
+
+		.input-bar-item > button {
+			margin-left: 5px;
+		}
+
+		.width100 {
+			width: 100%;
 		}
 	</style>
 
@@ -57,9 +70,11 @@
         	if (response['result'] == 'success') {
         		alert('검색 요청 성공!');
         		let articles = response['result_list'];
-        		for (let i = 0; i < articles.length; i++) {
+        		let dialogue = articles[articles.length-1]['kakao'];
+        		for (let i = 0; i < articles.length-1; i++) {
         			make_card(articles[i]['title'],articles[i]['content'],articles[i]['comment_col'])
         		}
+        		make_dialogue(dialogue)
         	} else {
         		alert('서버 오류!')
         	}
@@ -77,7 +92,15 @@
 			</div>';
 			$('#cards-box').append(temp_html);
 		}
-		
+
+		function make_dialogue(comment) {
+			let temp_html = '<div>\
+			<p>'+comment+'</p>\
+			</div>';
+			$('#dialogue_box').append(temp_html);
+		}
+			
+
 		function uplaoding() {
 			$.ajax({
 				type: "POST",
@@ -97,20 +120,45 @@
 
 <body>
 	<div class="wrap">
-		<h1>유저 동향 파악 보조 툴</h1>
+		<h1 style ="display: inline-block;">유저 소리 보청기</h1>
+		<h4 style ="display: inline-block;"> - 유저 의견, 빠르고 정확하게 듣자</h4>
 	</div>
-	<div class="wrap">
-		<div class="form-group">
-			<label for="exampleFormControlInput1">검색 단어</label>
-			<input id="word_search" class="form-control" placeholder="">
-			<button onclick="searching()" class="btn btn-primary">검색</button>
+
+	<div class="input-bar wrap">
+		<label for="exampleFormControlInput1">검색 단어</label>
+
+		<div class="input-bar-item width100">
+			<form>
+				<div class="form-group">
+					<input id="word_search" class="form-control" placeholder="단어를 입력하세요.">
+				</div>
+			</form>
 		</div>
+
+		<div class="input-bar-item">
+			<button onclick="searching()" class="btn btn-primary"}>검색</button>
+		</div>
+
 		<form action = "/upload" method = "POST"
 		enctype = "multipart/form-data">
 		<input type = "file" name = "file[]" multiple/>
 		<input type = "submit"/>
-	</form>
-	<div class="card-columns"  id="cards-box" style="width: 2000px">
+
 	</div>
+
+</form>
+
+<div class="row">
+	<div class="col-9">
+		<div class="card-columns"  id="cards-box">  	
+		</div>
+	</div>
+
+	<div class="col-3">
+		<table>
+			<div class="wrap" id = "dialogue_box">
+		</div>
+	</div>
+</div>
 </body>
 </html>
