@@ -60,6 +60,18 @@
 	</style>
 
 	<script>
+
+		$(document).ready(function(){
+
+    $('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.
+})
+		.ajaxStart(function(){
+      $('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
+  })
+		.ajaxStop(function(){
+      $('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
+  });
+
 		function searching() {
 			let word_search = $('#word_search').val();
 			$.ajax({
@@ -99,7 +111,7 @@
 			</div>';
 			$('#dialogue_box').append(temp_html);
 		}
-			
+
 
 		function uplaoding() {
 			$.ajax({
@@ -136,29 +148,32 @@
 		</div>
 
 		<div class="input-bar-item">
-			<button onclick="searching()" class="btn btn-primary"}>검색</button>
+			<button onclick="searching()" style ="display: inline-block;" class="btn btn-primary"}>검색</button>
 		</div>
 
 		<form action = "/upload" method = "POST"
 		enctype = "multipart/form-data">
 		<input type = "file" name = "file[]" multiple/>
 		<input type = "submit"/>
+		<p>*파일 제출은 권한자만 해주세요. 기능이 오작동할 수 있습니다.</p>
 
-	</div>
-
-</form>
-
-<div class="row">
-	<div class="col-9">
-		<div class="card-columns"  id="cards-box">  	
+		<div id = "Progress_Loading" style ="display: inline-block;">
+			<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile1.uf.tistory.com%2Fimage%2F9950163C5AFE32810A7310" alt="로딩중" />
 		</div>
-	</div>
 
-	<div class="col-3">
-		<table>
-			<div class="wrap" id = "dialogue_box">
+	</form>
+
+	<div class="row">
+		<div class="col-9">
+			<div class="card-columns"  id="cards-box">  	
+			</div>
 		</div>
-	</div>
-</div>
-</body>
-</html>
+
+		<div class="col-3">
+			<table>
+				<div class="wrap" id = "dialogue_box">
+				</div>
+			</div>
+		</div>
+	</body>
+	</html>
